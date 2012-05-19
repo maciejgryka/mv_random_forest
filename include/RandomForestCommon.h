@@ -7,13 +7,6 @@
 
 #include <Eigen/Core>
 
-//#ifndef EIGEN_CORE_H
-//namespace Eigen {
-//  class MatrixXf;
-//  class RowVectorXf;
-//}
-//#endif
-
 namespace RandomForest {
 
 typedef Eigen::MatrixXf Matrix;

@@ -7,11 +7,11 @@
 #include "RandomForestCommon.h"
 
 // DBG
-#include "DataProvider/PCAWrapper.h"
-#include "DataProvider/DataProvider.h"
-#include <opencv2/core/core.hpp>
-#include <opencv2/core/eigen.hpp>
-#include <opencv2/highgui/highgui.hpp>
+//#include "DataProvider/PCAWrapper.h"
+//#include "DataProvider/DataProvider.h"
+//#include <opencv2/core/core.hpp>
+//#include <opencv2/core/eigen.hpp>
+//#include <opencv2/highgui/highgui.hpp>
 
 #define PERFECT_IMPURITY_SCORE (-50.0)
 #define BAD_IMPURITY_SCORE (50.0)
@@ -116,48 +116,48 @@ public:
 	void set_split_dim(int split_dim) { split_dim_ = split_dim; };
 	void set_split_thresh(double split_thresh) { split_thresh_ = split_thresh; };
 
-  void WriteNodeLabels(const Matrix& data, const Matrix& labels, const std::string& folder, const std::string& prefix, const PCAWrapper& pcaw, int patch_size) {
-    if (!is_leaf_) {
-      left_->WriteNodeLabels(data, labels, folder, prefix, pcaw, patch_size);
-      right_->WriteNodeLabels(data, labels, folder, prefix, pcaw, patch_size);
-    } else {
-      std::stringstream nss;
-      nss << id_;
-      std::string node_dir = folder + nss.str() + "\\";
-      // make sure the directory exists
-      system(std::string("mkdir " + node_dir).c_str());
-      // get all labels at this leaf node
-      Matrix leaf_labels = SubsetRowwise(labels, samples_);
-      Matrix leaf_features = SubsetRowwise(data, samples_);
-      
-      double impurity = RandomForest::DistributionImpurity(NormalDistribution(leaf_labels));
-      std::string impurity_filename(node_dir + "\\");
-      std::stringstream ss;
-      ss << impurity;
-      impurity_filename += ss.str();
-      std::ofstream oif;
-      oif.open(impurity_filename, std::ios::out);
-      oif << " ";
-      oif.close();
-      
-      DataProvider::serializeMatrixXfAscii(leaf_labels, node_dir + "\\labels.csv");
-      DataProvider::serializeMatrixXfAscii(leaf_features, node_dir + "\\features.csv");
-      // back-project from PCA space
-      leaf_labels = pcaw.BackProject(leaf_labels);
-      // for each label
-      for (int r = 0; r < leaf_labels.rows(); ++r) {
-        // reshape into a square
-        Matrix im = leaf_labels.row(r);
-        im.resize(patch_size, patch_size);
-        // save as an image
-        cv::Mat im_cv;
-        cv::eigen2cv(im, im_cv);
-        std::stringstream rss;
-        rss << r;
-        cv::imwrite(node_dir + "\\" + rss.str() + ".png", im_cv*255);
-      }
-    }
-  };
+  //void WriteNodeLabels(const Matrix& data, const Matrix& labels, const std::string& folder, const std::string& prefix, const PCAWrapper& pcaw, int patch_size) {
+  //  if (!is_leaf_) {
+  //    left_->WriteNodeLabels(data, labels, folder, prefix, pcaw, patch_size);
+  //    right_->WriteNodeLabels(data, labels, folder, prefix, pcaw, patch_size);
+  //  } else {
+  //    std::stringstream nss;
+  //    nss << id_;
+  //    std::string node_dir = folder + nss.str() + "\\";
+  //    // make sure the directory exists
+  //    system(std::string("mkdir " + node_dir).c_str());
+  //    // get all labels at this leaf node
+  //    Matrix leaf_labels = SubsetRowwise(labels, samples_);
+  //    Matrix leaf_features = SubsetRowwise(data, samples_);
+  //    
+  //    double impurity = RandomForest::DistributionImpurity(NormalDistribution(leaf_labels));
+  //    std::string impurity_filename(node_dir + "\\");
+  //    std::stringstream ss;
+  //    ss << impurity;
+  //    impurity_filename += ss.str();
+  //    std::ofstream oif;
+  //    oif.open(impurity_filename, std::ios::out);
+  //    oif << " ";
+  //    oif.close();
+  //    
+  //    DataProvider::serializeMatrixXfAscii(leaf_labels, node_dir + "\\labels.csv");
+  //    DataProvider::serializeMatrixXfAscii(leaf_features, node_dir + "\\features.csv");
+  //    // back-project from PCA space
+  //    leaf_labels = pcaw.BackProject(leaf_labels);
+  //    // for each label
+  //    for (int r = 0; r < leaf_labels.rows(); ++r) {
+  //      // reshape into a square
+  //      Matrix im = leaf_labels.row(r);
+  //      im.resize(patch_size, patch_size);
+  //      // save as an image
+  //      cv::Mat im_cv;
+  //      cv::eigen2cv(im, im_cv);
+  //      std::stringstream rss;
+  //      rss << r;
+  //      cv::imwrite(node_dir + "\\" + rss.str() + ".png", im_cv*255);
+  //    }
+  //  }
+  //};
 
   // DBG
   std::vector<float> info_gains_;
