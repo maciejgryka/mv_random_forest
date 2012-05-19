@@ -41,9 +41,12 @@ std::string StdVectorToString(const std::vector<T>& vec) {
   return oss.str();
 };
 
+// convert between std::vector<float> and std::string and vice versa
 RowVector ReadFloatVector(const std::string& line, int size);
 Matrix ReadFloatMatrix(const std::string& line, int height, int width);
 
+// writes Matrix to the specified location as a CSV file
+void SerializeMatrix(const Matrix& data, const std::string& fileName);
 } // namespace RandomForest
 
 #endif // RANDOM_FOREST_COMMON_H

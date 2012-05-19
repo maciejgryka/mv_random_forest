@@ -1,5 +1,7 @@
 #include "RandomForestCommon.h"
 
+#include <fstream>
+
 using namespace RandomForest;
 
 int RandomForest::CountCommas(const std::string& s) {
@@ -32,4 +34,23 @@ Matrix RandomForest::ReadFloatMatrix(const std::string& line, int height, int wi
 	  }
   }
   return mat;
+}
+
+void RandomForest::SerializeMatrix(const Matrix& data, const std::string& fileName) {
+  int rows(static_cast<int>(data.rows()));
+  int cols(static_cast<int>(data.cols()));
+  // open the file for writing
+  std::ofstream out_file;
+  out_file.open(fileName, std::ios::out);
+
+  float temp;
+	for (int rIt = 0; rIt < rows; rIt ++) {
+		for (int cIt = 0; cIt < cols; cIt ++) {
+      temp = data(rIt, cIt);
+      out_file << temp;
+      if (cIt < cols-1) { out_file << ","; }
+		}
+    out_file << "\n";
+	}
+	out_file.close();
 }

@@ -1,5 +1,3 @@
-#include <fstream>
-
 #include "RandomForestCommon.h"
 #include "Ensemble.h"
 
@@ -7,28 +5,9 @@ using namespace RandomForest;
 
 static float kPi = 3.14159;
 
-// random foat between 0.0 and 1.0
+// random float between 0.0 and 1.0
 float rand1() {
   return static_cast<float>(rand())/RAND_MAX;
-}
-
-void serializeMatrix(const Matrix& data, const std::string& fileName) {
-  int rows(static_cast<int>(data.rows()));
-  int cols(static_cast<int>(data.cols()));
-  // open the file for writing
-  std::ofstream opFile;
-  opFile.open(fileName, std::ios::out);
-
-  float temp;
-	for (int rIt = 0; rIt < rows; rIt ++) {
-		for (int cIt = 0; cIt < cols; cIt ++) {
-      temp = data(rIt, cIt);
-      opFile << temp;
-      if (cIt < cols-1) opFile << ",";
-		}
-    opFile << "\n";
-	}
-	opFile.close();
 }
 
 int main(int argc, char* argv[]) {
@@ -52,12 +31,18 @@ int main(int argc, char* argv[]) {
 	int n_dim_trials(20);
 	int n_thresh_trials(100);
 	float bag_prob(0.66);
-	int min_sample_count(3);
+	int min_sample_count(4);
   // create and train the forest
   Ensemble forest(n_trees, max_depth, n_dim_in, n_dim_out);
-  forest.Train(features, labels, n_dim_trials, n_thresh_trials, bag_prob, min_sample_count);
+  forest.Train(
+      features,
+      labels,
+      n_dim_trials,
+      n_thresh_trials,
+      bag_prob,
+      min_sample_count);
   
-  // create some test data that's different to training
+  // create some test data that's different to training, but in the same range
   int n_samples_test = 100;
 	Matrix features_test(n_samples_test, n_dim_in);
 	Matrix labels_test_gt(n_samples_test, n_dim_out);
@@ -73,7 +58,7 @@ int main(int argc, char* argv[]) {
   for (int s = 0; s < n_samples_test; ++s) {
     labels_test.row(s) = forest.Test(features_test.row(s));
   }
-  serializeMatrix(features_test, "features_test.csv");
-  serializeMatrix(labels_test_gt, "labels_test_gt.csv");
-  serializeMatrix(labels_test, "labels_test.csv");
+  SerializeMatrix(features_test, "features_test.csv");
+  SerializeMatrix(labels_test_gt, "labels_test_gt.csv");
+  SerializeMatrix(labels_test, "labels_test.csv");
 } 
