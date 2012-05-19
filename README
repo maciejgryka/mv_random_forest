@@ -1,0 +1,7 @@
+Multivariate Regression Random Forest
+maciej.gryka@gmail.com
+
+This code implements Random Forest for multivaraite regression. See main.cpp for
+example usage.
+
+The Eigen library is required: http://eigen.tuxfamily.org/
