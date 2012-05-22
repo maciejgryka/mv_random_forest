@@ -1,6 +1,8 @@
 #include "RandomForestCommon.h"
 #include "Ensemble.h"
 
+#include <iostream>
+
 using namespace RandomForest;
 
 static float kPi = 3.14159;
@@ -12,17 +14,23 @@ float rand1() {
 
 int main(int argc, char* argv[]) {
   // create training data
-  float max_x = 2*kPi;
+  float max_x = 4*kPi;
   int n_samples = 1000;
   int n_dim_in = 1;
   int n_dim_out = 2;
   Matrix features(n_samples, n_dim_in);
 	Matrix labels(n_samples, n_dim_out);
-  for (int s = 0; s < n_samples; ++s) {
-    float x = max_x * rand1();
-    features(s, 0) = x;
-    labels(s,0) = sin(x);
-    labels(s,1) = cos(x);
+  // firts feature = 0
+  features(0, 0) = 0;
+  labels(0,0) = sin(features(0, 0));
+  labels(0,1) = cos(features(0, 0));
+  // remaining features are random increments that accumulate to approach max_x
+  float mean_step = max_x / n_samples;
+  for (int s = 1; s < n_samples; ++s) {
+    features(s, 0) = features(s-1,0) + mean_step;//*rand1();
+    labels(s,0) = sin(features(s, 0));
+    labels(s,1) = cos(features(s, 0));
+    //std::cout << features(s, 0) << ": " << labels(s, 0) << ", " << labels(s,1) << std::endl;
   }
 	
   // define forest parameters
@@ -46,11 +54,15 @@ int main(int argc, char* argv[]) {
   int n_samples_test = 100;
 	Matrix features_test(n_samples_test, n_dim_in);
 	Matrix labels_test_gt(n_samples_test, n_dim_out);
-  for (int s = 0; s < n_samples_test; ++s) {
-    float x = max_x * rand1();
-    features_test(s,0) = x;
-    labels_test_gt(s,0) = sin(x);
-    labels_test_gt(s,1) = cos(x);
+  features_test(0, 0) = 0;
+  labels_test_gt(0,0) = sin(features_test(0, 0));
+  labels_test_gt(0,1) = cos(features_test(0, 0));
+  float mean_step_test = max_x / n_samples_test;
+  for (int s = 1; s < n_samples_test; ++s) {
+    features_test(s,0) = features_test(s-1,0) + mean_step_test;// * rand1();
+    labels_test_gt(s,0) = sin(features_test(s,0));
+    labels_test_gt(s,1) = cos(features_test(s,0));
+    //std::cout << features_test(s, 0) << ": " << labels_test_gt(s, 0) << ", " << labels_test_gt(s,1) << std::endl;
   }
 	
   // test on the data and save results
