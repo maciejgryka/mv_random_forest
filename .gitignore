@@ -1,11 +1,7 @@
 ipch/
-PenumbraRemoval/x64/
-*_old*
-PatchPCA/x64/
 RandomForest/x64/
 RandomForest/data/
 RandomForest/Debug/
-RandomForestTest/data/
 x64/
 *.lnk
 *.png
