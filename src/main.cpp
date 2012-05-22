@@ -10,6 +10,14 @@ float rand1() {
   return static_cast<float>(rand())/RAND_MAX;
 }
 
+float label1(float feature) {
+  return sin(feature);
+}
+
+float label2(float feature) {
+  return cos(feature);
+}
+
 int main(int argc, char* argv[]) {
   // create training data
   float max_x = 4*kPi;
@@ -20,8 +28,8 @@ int main(int argc, char* argv[]) {
 	Matrix labels(n_samples, n_dim_out);
   for (int s = 0; s < n_samples; ++s) {
     features(s, 0) = max_x * rand1();
-    labels(s,0) = sin(features(s, 0));
-    labels(s,1) = cos(features(s, 0));
+    labels(s,0) = label1(features(s, 0));
+    labels(s,1) = label2(features(s, 0));
   }
 	
   // define forest parameters
@@ -46,13 +54,13 @@ int main(int argc, char* argv[]) {
 	Matrix features_test(n_samples_test, n_dim_in);
 	Matrix labels_test_gt(n_samples_test, n_dim_out);
   features_test(0, 0) = 0;
-  labels_test_gt(0,0) = sin(features_test(0, 0));
-  labels_test_gt(0,1) = cos(features_test(0, 0));
+  labels_test_gt(0,0) = label1(features_test(0, 0));
+  labels_test_gt(0,1) = label2(features_test(0, 0));
   float mean_step_test = max_x / n_samples_test;
   for (int s = 1; s < n_samples_test; ++s) {
     features_test(s,0) = features_test(s-1,0) + mean_step_test;// * rand1();
-    labels_test_gt(s,0) = sin(features_test(s,0));
-    labels_test_gt(s,1) = cos(features_test(s,0));
+    labels_test_gt(s,0) = label1(features_test(s,0));
+    labels_test_gt(s,1) = label2(features_test(s,0));
   }
 	
   // test on the data and save results
