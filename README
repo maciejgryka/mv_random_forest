@@ -3,5 +3,7 @@ maciej.gryka@gmail.com
 
 This code implements Random Forest for multivaraite regression. See main.cpp for
 example usage.
+The results can be plotted using included python script (you will need to put it
+next to output files or modify the paths).
 
 The Eigen library is required: http://eigen.tuxfamily.org/
